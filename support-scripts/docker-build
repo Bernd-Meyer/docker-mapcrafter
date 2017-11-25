@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker build --file ../Dockerfile --tag be-me/mapcrafter:2.4-1 --build-arg min=30 --build-arg hr=2 .
