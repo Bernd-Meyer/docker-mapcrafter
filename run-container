@@ -1,0 +1,9 @@
+#!/bin/bash
+
+printf "#!/bin/bash\n\nexport JOBS=%s\n" "$JOBS" > /export-environment
+chmod +x /export-environment
+
+printf "%s %s %s %s %s root . /export-environment;/run-mapcrafter >>/var/log/cron.log 2>&1\n\n" "$CRON_MIN" "$CRON_HR" "$CRON_D" "$CRON_M" "$CRON_DOW" > /etc/cron.d/mapcrafter
+chmod 0644 /etc/cron.d/mapcrafter
+
+cron -f

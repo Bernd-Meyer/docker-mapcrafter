@@ -6,17 +6,11 @@ LABEL maintainer="Bernd Meyer <be.me@posteo.de>"
 ARG DEBIAN_VERSION
 ENV MAPCRAFTER_VERSION=2.4-1
 ENV JOBS=1
-
-# cron: minute (0 - 59)
-ARG min=30
-# cron: hour (0 - 23)
-ARG hr=2
-# cron: day (1 - 31)
-ARG day=*
-# cron: month (1 - 12)
-ARG month=*
-# cron: day of week (0 - 7, sunday is 0 or 7)
-ARG dow=*
+ENV CRON_MIN=30
+ENV CRON_HR=2
+ENV CRON_D=*
+ENV CRON_M=*
+ENV CRON_DOW=*
 
 VOLUME ["/config", "/output", "/world"]
 
@@ -43,11 +37,10 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ADD run-container /run-container
 ADD run-mapcrafter /run-mapcrafter
 ADD render.conf /
 
-RUN printf "%s %s %s %s %s root /run-mapcrafter >>/var/log/cron.log 2>&1\n\n" "$min" "$hr" "$day" "$month" "$dow" > /etc/cron.d/mapcrafter && \
-    chmod 0644 /etc/cron.d/mapcrafter && \
-    chmod 0777 /run-mapcrafter
+RUN chmod +x /run-container /run-mapcrafter
 
-CMD ["cron", "-f"]
+CMD ["/run-container"]
