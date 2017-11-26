@@ -5,6 +5,7 @@ LABEL maintainer="Bernd Meyer <be.me@posteo.de>"
 
 ARG DEBIAN_VERSION
 ENV MAPCRAFTER_VERSION=2.4-1
+ENV JOBS=1
 
 # cron: minute (0 - 59)
 ARG min=30
